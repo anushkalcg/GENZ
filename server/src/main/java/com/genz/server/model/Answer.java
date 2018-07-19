@@ -1,4 +1,9 @@
 package com.genz.server.model;
 
-public class Answer {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "answers")
+public class Answer extends AbstractEntry {
 }

@@ -1,4 +1,9 @@
 package com.genz.server.model;
 
-public class Group {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "groups")
+public class Group extends AbstractEntry{
 }

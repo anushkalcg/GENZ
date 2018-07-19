@@ -1,4 +1,7 @@
 package com.genz.server.service.user;
 
-public interface UserService {
+import com.genz.server.model.User;
+import com.genz.server.service.CommonService;
+
+public interface UserService extends CommonService<User> {
 }
