@@ -6,7 +6,6 @@ import com.genz.server.model.User;
 import com.genz.server.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,13 +23,10 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @Override
     public User add(User entry) {
         validationAdd(entry);
-        entry.setPassword(passwordEncoder.encode(entry.getPassword()));
+
         return userRepository.save(entry);
     }
 
