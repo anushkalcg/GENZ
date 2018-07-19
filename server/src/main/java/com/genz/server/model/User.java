@@ -1,34 +1,46 @@
 package com.genz.server.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
+@ApiModel(description = "User's information.")
 public class User extends AbstractEntry{
 
     @Column(name = "score")
+    @ApiModelProperty(notes = "The database generated user ID")
     private Integer score;
 
+    @ApiModelProperty(notes = "User's email", required = true)
     @Column(name = "email")
     private String email;
 
+    @ApiModelProperty(notes = "User's password", required = true)
     @Column(name = "password")
     private String password;
 
+    @ApiModelProperty(notes = "User's firstname", required = true)
     @Column(name = "firstname")
     private String name;
 
+    @ApiModelProperty(notes = "User's lastname", required = true)
     @Column(name = "surname")
     private String surname;
 
+    @ApiModelProperty(notes = "User's age", required = true)
     @Column(name = "age")
     private Integer age;
 
+    @ApiModelProperty(notes = "User's phone number", required = true)
     @Column(name = "phonenumber")
     private String phoneNumber;
 
+    @ApiModelProperty(notes = "User's username", required = true)
     @Column(name = "username")
     private String username;
 
@@ -116,4 +128,38 @@ public class User extends AbstractEntry{
         this.username = username;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(score, user.score) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(age, user.age) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(score, email, password, name, surname, age, phoneNumber, username);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "score=" + score +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

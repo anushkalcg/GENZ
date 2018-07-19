@@ -1,5 +1,7 @@
 package com.genz.server.service.group;
 
+import com.genz.server.exception.ResourceNotFoundException;
+import com.genz.server.exception.ResourceValidationException;
 import com.genz.server.model.Group;
 
 import java.util.List;
@@ -28,5 +30,20 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Group get(Long id) {
         return null;
+    }
+
+    @Override
+    public void validationAdd(Group entry) throws ResourceValidationException {
+
+    }
+
+    @Override
+    public void validationUpdate(Group entry) throws ResourceValidationException, ResourceNotFoundException {
+
+    }
+
+    @Override
+    public void validationEntryProperties(Group entry) {
+
     }
 }
