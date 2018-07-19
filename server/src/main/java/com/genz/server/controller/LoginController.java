@@ -2,6 +2,7 @@ package com.genz.server.controller;
 
 import com.genz.server.model.User;
 import com.genz.server.service.user.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class LoginController {
     @Autowired
     UserServiceImpl userService;
 
+    @ApiOperation(value = "Finds the user with the associated ( username, password )", response = User.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 404, message = "The user didnt found.")

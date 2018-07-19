@@ -2,6 +2,8 @@ package com.genz.server.controller;
 
 import com.genz.server.model.User;
 import com.genz.server.service.user.UserServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@Api(value = "userManagement", description = "This API is for user management actions")
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
 
+
+    @ApiOperation(value = "View the user's information from the associated id.", response = User.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 400, message = "Valdation with request."),
@@ -27,6 +32,7 @@ public class UserController {
         return userService.get(id);
     }
 
+    @ApiOperation(value = "View all users's information.", response = User.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 400, message = "Valdation with request."),
@@ -37,6 +43,7 @@ public class UserController {
         return userService.listAll();
     }
 
+    @ApiOperation(value = "Add a new User", response = User.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 400, message = "Valdation with request.")
@@ -46,6 +53,7 @@ public class UserController {
         return userService.add(user);
     }
 
+    @ApiOperation(value = "Update user's information", response = User.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 400, message = "Valdation with request.")
@@ -55,6 +63,7 @@ public class UserController {
         return userService.update(user);
     }
 
+    @ApiOperation(value = "Delete a user")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 400, message = "Valdation with request.")
