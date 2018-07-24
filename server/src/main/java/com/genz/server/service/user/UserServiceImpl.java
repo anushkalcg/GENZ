@@ -3,6 +3,7 @@ package com.genz.server.service.user;
 import com.genz.server.exception.ResourceNotFoundException;
 import com.genz.server.exception.ResourceValidationException;
 import com.genz.server.model.User;
+import com.genz.server.model.UserStatus;
 import com.genz.server.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User add(User entry) {
         validationAdd(entry);
-
+        entry.setUserStatus(UserStatus.NOT_STARTED);
         return userRepository.save(entry);
     }
 
