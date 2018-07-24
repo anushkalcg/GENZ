@@ -1,6 +1,8 @@
 package com.genz.server.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,16 +12,21 @@ import java.util.Set;
 
 @Entity
 @Table(name = "groups")
+@ApiModel(description = "Group model")
 public class Group extends AbstractEntry{
 
+    @ApiModelProperty(notes = "Associated users")
     @ManyToMany(mappedBy = "groups", targetEntity = User.class)
     @JsonBackReference
-    private Set<User> users = new HashSet<>();
+    private Set<User> users;
 
+    @ApiModelProperty(notes = "Group's name", required = true)
     @Column(name = "name")
     private String name;
 
+    @ApiModelProperty(notes = "Associated questions", required = true)
     @OneToMany(mappedBy="group")
+    @JsonBackReference
     private Set<Question> questions;
 
     public Group() {
@@ -61,6 +68,29 @@ public class Group extends AbstractEntry{
             questions = new HashSet<>();
         }
         questions.add(question);
+    }
+
+    public void addUser(User user){
+        if(users == null){
+            users = new HashSet<>();
+        }
+        users.add(user);
+    }
+
+    public void removeUser(User user){
+        if(users != null){
+           if(users.contains(user)){
+               users.remove(user);
+           }
+        }
+    }
+
+    public void removeQuestion(Question question){
+        if(questions != null){
+            if(questions.contains(question)){
+                questions.remove(question);
+            }
+        }
     }
 
     @Override

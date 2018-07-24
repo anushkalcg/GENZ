@@ -1,26 +1,37 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "answers")
+@ApiModel(description = "Answer model")
 public class Answer extends AbstractEntry {
 
     @Column(name = "text")
+    @ApiModelProperty(notes = "Answer's text", required = true)
     private String text;
 
+    @ApiModelProperty(notes = "Answer's priority", required = true)
     @Column(name = "priority")
     private Integer priority;
 
+    @ApiModelProperty(notes = "Answer's points", required = true)
     @Column(name = "points")
     private Integer points;
 
+    @ApiModelProperty(notes = "Answer's odds", required = true)
     @Column(name = "odds")
     private double odds;
 
+    @ApiModelProperty(notes = "The associated question", required = true)
     @ManyToOne
     @JoinColumn(name="question_id")
+    @JsonManagedReference
     private Question question;
 
     public Answer() {

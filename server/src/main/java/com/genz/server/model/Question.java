@@ -1,5 +1,10 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -7,22 +12,30 @@ import java.util.Set;
 
 @Entity
 @Table(name = "questions")
+@ApiModel(description = "Question  model")
 public class Question extends AbstractEntry{
 
+    @ApiModelProperty(notes = "Question's text", required = true)
     @Column(name = "text")
     private String text;
 
+    @ApiModelProperty(notes = "Question's priority", required = true)
     @Column(name = "priority")
     private Integer priority;
 
+    @ApiModelProperty(notes = "Question's correct answer id", required = true)
     @Column(name = "correct_answer_id")
     private Integer correctAswer;
 
+    @ApiModelProperty(notes = "Associated group", required = true)
     @ManyToOne
     @JoinColumn(name="group_id")
+    @JsonManagedReference
     private Group group;
 
+    @ApiModelProperty(notes = "Associated answers", required = true)
     @OneToMany(mappedBy="question")
+    @JsonBackReference
     private Set<Answer> answers;
 
     public Question() {

@@ -1,41 +1,43 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.genz.server.utils.UserStatisticsEntryToJsonConverter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "userstatistics")
+@ApiModel(description = "User's statistics")
 public class UserStatistics {
 
     @Id
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name="id", nullable=false)
-    private User userInfo;
-
-    @Column(name = "user_answers")
+    @ApiModelProperty(notes = "User's answers and points per week", required = true)
+    @Column(name = "user_answers_points_per_week")
     @Convert(converter=UserStatisticsEntryToJsonConverter.class)
     private UserStatisticsEntry userStatisticsEntry;
 
+    @ApiModelProperty(notes = "User's id", required = true)
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JsonManagedReference
     private User user;
 
     public UserStatistics() {
     }
 
-    public UserStatistics(User userInfo, UserStatisticsEntry userStatisticsEntry, User user) {
+    public UserStatistics(UserStatisticsEntry userStatisticsEntry, User user) {
         this();
-        this.userInfo = userInfo;
         this.userStatisticsEntry = userStatisticsEntry;
         this.user = user;
     }
 
-    public UserStatistics(Long id, User userInfo, UserStatisticsEntry userStatisticsEntry, User user) {
-        this(userInfo, userStatisticsEntry, user);
+    public UserStatistics(Long id, UserStatisticsEntry userStatisticsEntry, User user) {
+        this(userStatisticsEntry, user);
         this.id = id;
     }
 
@@ -45,14 +47,6 @@ public class UserStatistics {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(User userInfo) {
-        this.userInfo = userInfo;
     }
 
     public UserStatisticsEntry getUserStatisticsEntry() {
@@ -77,7 +71,6 @@ public class UserStatistics {
         if (o == null || getClass() != o.getClass()) return false;
         UserStatistics that = (UserStatistics) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(userInfo, that.userInfo) &&
                 Objects.equals(userStatisticsEntry, that.userStatisticsEntry) &&
                 Objects.equals(user, that.user);
     }
@@ -85,14 +78,13 @@ public class UserStatistics {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userInfo, userStatisticsEntry, user);
+        return Objects.hash(id, userStatisticsEntry, user);
     }
 
     @Override
     public String toString() {
         return "UserStatistics{" +
                 "id=" + id +
-                ", userInfo=" + userInfo +
                 ", userStatisticsEntry=" + userStatisticsEntry +
                 ", user=" + user +
                 '}';

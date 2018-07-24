@@ -1,11 +1,11 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -51,6 +51,7 @@ public class User extends AbstractEntry{
     @Column(name = "user_status")
     private UserStatus userStatus;
 
+    @ApiModelProperty(notes = "Groups where user is member", required = true)
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = {
@@ -64,8 +65,10 @@ public class User extends AbstractEntry{
     @JsonManagedReference
     private Set<Group> groups = new HashSet<>();
 
+    @ApiModelProperty(notes = "User's statistics", required = true)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
+    @JsonBackReference
     private UserStatistics userStatistics;
 
     public User() {

@@ -1,9 +1,8 @@
 package com.genz.server.utils;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.genz.server.exception.JSONException;
 import com.genz.server.model.UserStatisticsEntry;
 
 import javax.persistence.AttributeConverter;
@@ -21,7 +20,7 @@ public class UserStatisticsEntryToJsonConverter implements AttributeConverter<Us
         try {
             json = objectMapper.writeValueAsString(userStatisticsEntry);
         } catch (JsonProcessingException jpe) {
-            // Handle exception
+            throw new JSONException("Error while trying to convert to database column");
         }
         return json;
     }
@@ -32,7 +31,7 @@ public class UserStatisticsEntryToJsonConverter implements AttributeConverter<Us
         try {
             userStatisticsEntry = objectMapper.readValue(userStatisticsEntryAsJson, UserStatisticsEntry.class);
         } catch (IOException e) {
-            // HandleException
+            throw new JSONException("Error while trying to convert to Entity");
         }
         return userStatisticsEntry;
     }
