@@ -13,6 +13,6 @@ public interface GroupService extends CommonService<Group> {
     Group removeUser(Long groupId, Long userId);
 
     Group addNewQuestion(Long groupId, Long questionId);
-    List<Question> getQuestions(Long questionId);
+    List<Question> getQuestions(Long groupId);
     Group removeQuestion(Long groupId, Long QuestionId);
 }

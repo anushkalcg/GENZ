@@ -2,6 +2,7 @@ package com.genz.server.service.user;
 
 import com.genz.server.exception.ResourceNotFoundException;
 import com.genz.server.exception.ResourceValidationException;
+import com.genz.server.model.Group;
 import com.genz.server.model.User;
 import com.genz.server.model.UserStatus;
 import com.genz.server.repository.UserRepository;
@@ -71,6 +72,11 @@ public class UserServiceImpl implements UserService{
             throw new ResourceNotFoundException("The user not found");
         }
         return user;
+    }
+
+    @Override
+    public List<Group> getGroups(Long userId) {
+        return null;
     }
 
     @Override
