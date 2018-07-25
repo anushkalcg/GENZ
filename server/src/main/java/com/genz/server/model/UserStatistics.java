@@ -24,7 +24,6 @@ public class UserStatistics {
     @ApiModelProperty(notes = "User's id", required = true)
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JsonManagedReference
     private User user;
 
     public UserStatistics() {

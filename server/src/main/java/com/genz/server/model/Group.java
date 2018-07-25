@@ -1,6 +1,7 @@
 package com.genz.server.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,7 +18,6 @@ public class Group extends AbstractEntry{
 
     @ApiModelProperty(notes = "Associated users")
     @ManyToMany(mappedBy = "groups", targetEntity = User.class)
-    @JsonBackReference
     private Set<User> users;
 
     @ApiModelProperty(notes = "Group's name", required = true)
@@ -26,7 +26,6 @@ public class Group extends AbstractEntry{
 
     @ApiModelProperty(notes = "Associated questions", required = true)
     @OneToMany(mappedBy="group")
-    @JsonBackReference
     private Set<Question> questions;
 
     public Group() {

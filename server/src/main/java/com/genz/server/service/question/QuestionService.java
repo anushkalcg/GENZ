@@ -5,11 +5,11 @@ import com.genz.server.model.Group;
 import com.genz.server.model.Question;
 import com.genz.server.service.CommonService;
 
-import java.util.List;
+import java.util.Set;
 
 public interface QuestionService extends CommonService<Question> {
 
-    Group addNewAnswer(Long questionId, Answer answer);
-    List<Answer> getAnswers(Long questionId);
+    Question addNewAnswer(Long questionId, Answer answer);
+    Set<Answer> getAnswers(Long questionId);
     Group removeAnswer(Long questionId, Long answerId);
 }

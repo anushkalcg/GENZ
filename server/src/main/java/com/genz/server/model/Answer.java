@@ -1,5 +1,6 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,7 +32,6 @@ public class Answer extends AbstractEntry {
     @ApiModelProperty(notes = "The associated question", required = true)
     @ManyToOne
     @JoinColumn(name="question_id")
-    @JsonManagedReference
     private Question question;
 
     public Answer() {

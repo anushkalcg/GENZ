@@ -5,18 +5,42 @@ import com.genz.server.exception.ResourceValidationException;
 import com.genz.server.model.Answer;
 import com.genz.server.model.Group;
 import com.genz.server.model.Question;
+import com.genz.server.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+@Service
+@Transactional
 public class QuestionServiceImpl implements QuestionService {
+
+    @Autowired
+    QuestionRepository questionRepository;
+
     @Override
-    public Group addNewAnswer(Long questionId, Answer answer) {
-        return null;
+    public Question addNewAnswer(Long questionId, Answer answer) {
+        return Optional.ofNullable(questionRepository.findOne(questionId))
+                .map(question -> {
+
+                    //TODO check if there is actual a addition
+                    question.addAnswer(answer);
+                    return questionRepository.save(question);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND question with ID:" + questionId));
+
     }
 
     @Override
-    public List<Answer> getAnswers(Long questionId) {
-        return null;
+    public Set<Answer> getAnswers(Long questionId) {
+        return Optional.ofNullable(questionRepository.findOne(questionId))
+                .map(question -> {
+                    return question.getAnswers();
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Question with ID:" + questionId));
     }
 
     @Override
@@ -26,22 +50,29 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question add(Question entry) {
-        return null;
+        return questionRepository.save(entry);
     }
 
     @Override
     public List<Question> listAll() {
-        return null;
+        return questionRepository.findAll();
     }
 
     @Override
     public Question update(Question entry) {
-        return null;
+        return Optional.ofNullable(questionRepository.findOne(entry.getId()))
+                .map(question -> {
+                    return questionRepository.save(question);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND question with ID:" + entry.getId()));
     }
 
     @Override
     public void delete(Long id) {
-
+        if(!questionRepository.exists(id)){
+            throw new ResourceNotFoundException("NOT FOUND question with ID:" + id);
+        }
+        questionRepository.delete(id);
     }
 
     @Override

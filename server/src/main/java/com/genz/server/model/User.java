@@ -1,6 +1,7 @@
 package com.genz.server.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -62,13 +63,11 @@ public class User extends AbstractEntry{
     @JoinTable(name = "users_groups",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    @JsonManagedReference
-    private Set<Group> groups = new HashSet<>();
+    private Set<Group> groups;
 
     @ApiModelProperty(notes = "User's statistics", required = true)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    @JsonBackReference
     private UserStatistics userStatistics;
 
     public User() {
@@ -200,6 +199,7 @@ public class User extends AbstractEntry{
     public int hashCode() {
 
         return Objects.hash(super.hashCode(), score, email, password, name, surname, age, phoneNumber, username, userStatus, groups, userStatistics);
+
     }
 
     @Override
