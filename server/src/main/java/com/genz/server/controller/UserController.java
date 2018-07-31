@@ -36,7 +36,6 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
             @ApiResponse(code = 400, message = "Valdation with request."),
-            @ApiResponse(code = 404, message = "The user didnt found.")
     })
     @GetMapping(produces = "application/json;charset=UTF-8")
     public List<User> listAll(){
@@ -56,7 +55,8 @@ public class UserController {
     @ApiOperation(value = "Update user's information", response = User.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
-            @ApiResponse(code = 400, message = "Valdation with request.")
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The user didnt found.")
     })
     @PutMapping(consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
     public User updateUser(@RequestBody User user){
@@ -66,9 +66,10 @@ public class UserController {
     @ApiOperation(value = "Delete a user")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the user info"),
-            @ApiResponse(code = 400, message = "Valdation with request.")
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The user didnt found.")
     })
-    @PutMapping(value = "/{id}", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/{id}",  produces = "application/json;charset=UTF-8")
     public void deleteUser(@PathVariable(value = "id") Long id){
         userService.delete(id);
     }

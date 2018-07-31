@@ -1,11 +1,16 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -13,7 +18,7 @@ import java.util.Objects;
 public class User extends AbstractEntry{
 
     @Column(name = "score")
-    @ApiModelProperty(notes = "The database generated user ID")
+    @ApiModelProperty(notes = "User's total score")
     private Integer score;
 
     @ApiModelProperty(notes = "User's email", required = true)
@@ -44,10 +49,33 @@ public class User extends AbstractEntry{
     @Column(name = "username")
     private String username;
 
+    @ApiModelProperty(notes = "User's status", required = true)
+    @Column(name = "user_status")
+    private UserStatus userStatus;
+
+    @ApiModelProperty(notes = "Groups where user is member", required = true)
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            targetEntity = Group.class)
+    @JoinTable(name = "users_groups",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "group_id") })
+    @JsonIgnore
+    private List<Group> groups;
+
+    @ApiModelProperty(notes = "User's statistics", required = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private UserStatistics userStatistics;
+
     public User() {
     }
 
-    public User(Integer score, String email, String password, String name, String surname, Integer age, String phoneNumber, String username) {
+    public User(Integer score, String email, String password, String name, String surname, Integer age, String phoneNumber, String username, UserStatus userStatus, List<Group> groups, UserStatistics userStatistics) {
         this();
         this.score = score;
         this.email = email;
@@ -57,11 +85,9 @@ public class User extends AbstractEntry{
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.username = username;
-    }
-
-    public User(Long id, Integer score, String email, String password, String name, String surname, Integer age, String phoneNumber, String username) {
-        this(score, email, password, name, surname, age, phoneNumber, username);
-        this.setId(id);
+        this.userStatus = userStatus;
+        this.groups = groups;
+        this.userStatistics = userStatistics;
     }
 
     public Integer getScore() {
@@ -128,10 +154,35 @@ public class User extends AbstractEntry{
         this.username = username;
     }
 
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public UserStatistics getUserStatistics() {
+        return userStatistics;
+    }
+
+    public void setUserStatistics(UserStatistics userStatistics) {
+        this.userStatistics = userStatistics;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         User user = (User) o;
         return Objects.equals(score, user.score) &&
                 Objects.equals(email, user.email) &&
@@ -140,13 +191,16 @@ public class User extends AbstractEntry{
                 Objects.equals(surname, user.surname) &&
                 Objects.equals(age, user.age) &&
                 Objects.equals(phoneNumber, user.phoneNumber) &&
-                Objects.equals(username, user.username);
+                Objects.equals(username, user.username) &&
+                userStatus == user.userStatus &&
+                Objects.equals(userStatistics, user.userStatistics);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(score, email, password, name, surname, age, phoneNumber, username);
+        return Objects.hash(super.hashCode(), score, email, password, name, surname, age, phoneNumber, username, userStatus, userStatistics);
+
     }
 
     @Override
@@ -160,6 +214,8 @@ public class User extends AbstractEntry{
                 ", age=" + age +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", username='" + username + '\'' +
+                ", userStatus=" + userStatus +
+                ", userStatistics=" + userStatistics +
                 '}';
     }
 }
