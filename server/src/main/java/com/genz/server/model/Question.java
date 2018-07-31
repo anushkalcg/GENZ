@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "questions")
@@ -31,16 +29,17 @@ public class Question extends AbstractEntry{
     @ApiModelProperty(notes = "Associated group", required = true)
     @ManyToOne
     @JoinColumn(name="group_id")
+    @JsonIgnore
     private Group group;
 
     @ApiModelProperty(notes = "Associated answers", required = true)
-    @OneToMany(mappedBy="question", cascade = CascadeType.ALL)
-    private Set<Answer> answers;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="question", cascade = CascadeType.ALL)
+    private List<Answer> answers;
 
     public Question() {
     }
 
-    public Question(String text, Integer priority, Integer correctAswer, Group group, Set<Answer> answers) {
+    public Question(String text, Integer priority, Integer correctAswer, Group group, List<Answer> answers) {
         this();
         this.text = text;
         this.priority = priority;
@@ -81,18 +80,22 @@ public class Question extends AbstractEntry{
         this.group = group;
     }
 
-    public Set<Answer> getAnswers() {
+    public List<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Set<Answer> answers) {
-        this.answers = answers;
+    public void setAnswers(List<Answer> answers) {
+        if(!answers.isEmpty()) {
+            answers.forEach(answer -> answer.setQuestion(this));
+            this.answers = answers;
+        }
     }
 
     public void addAnswer(Answer answer){
         if(answers == null){
-            answers = new HashSet<>();
+            answers = new ArrayList<>();
         }
+        answer.setQuestion(this);
         answers.add(answer);
     }
 
@@ -105,14 +108,13 @@ public class Question extends AbstractEntry{
         return Objects.equals(text, question.text) &&
                 Objects.equals(priority, question.priority) &&
                 Objects.equals(correctAswer, question.correctAswer) &&
-                Objects.equals(group, question.group) &&
                 Objects.equals(answers, question.answers);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), text, priority, correctAswer, group, answers);
+        return Objects.hash(super.hashCode(), text, priority, correctAswer, answers);
     }
 
     @Override
@@ -121,7 +123,6 @@ public class Question extends AbstractEntry{
                 "text='" + text + '\'' +
                 ", priority=" + priority +
                 ", correctAswer=" + correctAswer +
-                ", group=" + group +
                 ", answers=" + answers +
                 '}';
     }

@@ -48,7 +48,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public Set<User> getUsers(Long groupId) {
+    public List<User> getUsers(Long groupId) {
         return Optional.ofNullable(groupRepository.findOne(groupId))
                 .map(group -> {
                     return group.getUsers();
@@ -91,7 +91,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public Set<Question> getQuestions(Long groupId) {
+    public List<Question> getQuestions(Long groupId) {
         return Optional.ofNullable(groupRepository.findOne(groupId))
                 .map(group -> {
                     return group.getQuestions();

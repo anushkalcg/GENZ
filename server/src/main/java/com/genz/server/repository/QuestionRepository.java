@@ -9,6 +9,6 @@ import java.util.Set;
 
 @Repository
 public interface QuestionRepository extends CrudRepository<Question, Long> {
-    Set<Question> findAllByGroup(Long groupId);
+    List<Question> findAllByGroup(Long groupId);
     List<Question> findAll();
 }

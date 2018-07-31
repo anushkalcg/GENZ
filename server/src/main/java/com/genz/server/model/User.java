@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -63,7 +64,8 @@ public class User extends AbstractEntry{
     @JoinTable(name = "users_groups",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    private Set<Group> groups;
+    @JsonIgnore
+    private List<Group> groups;
 
     @ApiModelProperty(notes = "User's statistics", required = true)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
@@ -73,7 +75,7 @@ public class User extends AbstractEntry{
     public User() {
     }
 
-    public User(Integer score, String email, String password, String name, String surname, Integer age, String phoneNumber, String username, UserStatus userStatus, Set<Group> groups, UserStatistics userStatistics) {
+    public User(Integer score, String email, String password, String name, String surname, Integer age, String phoneNumber, String username, UserStatus userStatus, List<Group> groups, UserStatistics userStatistics) {
         this();
         this.score = score;
         this.email = email;
@@ -160,11 +162,11 @@ public class User extends AbstractEntry{
         this.userStatus = userStatus;
     }
 
-    public Set<Group> getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<Group> groups) {
+    public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
 
@@ -191,14 +193,13 @@ public class User extends AbstractEntry{
                 Objects.equals(phoneNumber, user.phoneNumber) &&
                 Objects.equals(username, user.username) &&
                 userStatus == user.userStatus &&
-                Objects.equals(groups, user.groups) &&
                 Objects.equals(userStatistics, user.userStatistics);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), score, email, password, name, surname, age, phoneNumber, username, userStatus, groups, userStatistics);
+        return Objects.hash(super.hashCode(), score, email, password, name, surname, age, phoneNumber, username, userStatus, userStatistics);
 
     }
 
@@ -214,7 +215,6 @@ public class User extends AbstractEntry{
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", username='" + username + '\'' +
                 ", userStatus=" + userStatus +
-                ", groups=" + groups +
                 ", userStatistics=" + userStatistics +
                 '}';
     }

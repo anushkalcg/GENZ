@@ -32,6 +32,7 @@ public class Answer extends AbstractEntry {
     @ApiModelProperty(notes = "The associated question", required = true)
     @ManyToOne
     @JoinColumn(name="question_id")
+    @JsonIgnore
     private Question question;
 
     public Answer() {
@@ -95,14 +96,13 @@ public class Answer extends AbstractEntry {
         return Double.compare(answer.odds, odds) == 0 &&
                 Objects.equals(text, answer.text) &&
                 Objects.equals(priority, answer.priority) &&
-                Objects.equals(points, answer.points) &&
-                Objects.equals(question, answer.question);
+                Objects.equals(points, answer.points);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), text, priority, points, odds, question);
+        return Objects.hash(super.hashCode(), text, priority, points, odds);
     }
 
     @Override
@@ -112,7 +112,6 @@ public class Answer extends AbstractEntry {
                 ", priority=" + priority +
                 ", points=" + points +
                 ", odds=" + odds +
-                ", question=" + question +
                 '}';
     }
 }

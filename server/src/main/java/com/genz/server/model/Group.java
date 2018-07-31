@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -18,7 +16,7 @@ public class Group extends AbstractEntry{
 
     @ApiModelProperty(notes = "Associated users")
     @ManyToMany(mappedBy = "groups", targetEntity = User.class)
-    private Set<User> users;
+    private List<User> users;
 
     @ApiModelProperty(notes = "Group's name", required = true)
     @Column(name = "name")
@@ -26,23 +24,23 @@ public class Group extends AbstractEntry{
 
     @ApiModelProperty(notes = "Associated questions", required = true)
     @OneToMany(mappedBy="group")
-    private Set<Question> questions;
+    private List<Question> questions;
 
     public Group() {
     }
 
-    public Group(Set<User> users, String name, Set<Question> questions) {
+    public Group(List<User> users, String name, List<Question> questions) {
         this();
         this.users = users;
         this.name = name;
         this.questions = questions;
     }
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
@@ -54,24 +52,24 @@ public class Group extends AbstractEntry{
         this.name = name;
     }
 
-    public Set<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
 
     public void addQuestion(Question question){
         if(questions == null){
-            questions = new HashSet<>();
+            questions = new ArrayList<>();
         }
         questions.add(question);
     }
 
     public void addUser(User user){
         if(users == null){
-            users = new HashSet<>();
+            users = new ArrayList<>();
         }
         users.add(user);
     }
