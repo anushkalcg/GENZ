@@ -1,0 +1,11 @@
+.Play-buttons {
+    display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.Your-Leagues {
+    margin: 20px;
+    align-items: center;
+    flex-direction: column;
+}
