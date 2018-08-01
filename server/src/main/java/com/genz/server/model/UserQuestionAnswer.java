@@ -3,6 +3,9 @@ package com.genz.server.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * @author Nikos.Toulios
+ */
 public class UserQuestionAnswer implements Serializable {
 
     private static final long serialVersionUID = -6497735871470007398L;

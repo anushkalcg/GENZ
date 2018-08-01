@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Nikos.Toulios
+ */
 @RestController
 @RequestMapping("/api/question")
 @Api(value = "questionManagement", description = "This API is for question management actions")

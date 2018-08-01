@@ -9,6 +9,9 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.io.IOException;
 
+/**
+ * @author Nikos.Toulios
+ */
 @Converter
 public class UserStatisticsEntryToJsonConverter implements AttributeConverter<UserStatisticsEntry, String> {
 

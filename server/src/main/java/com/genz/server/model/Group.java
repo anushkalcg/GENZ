@@ -1,14 +1,14 @@
 package com.genz.server.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.*;
 
-
+/**
+ * @author Nikos.Toulios
+ */
 @Entity
 @Table(name = "groups", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"}) })

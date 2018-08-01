@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Nikos.Toulios
+ */
 @Service
 @Transactional
 public class QuestionServiceImpl implements QuestionService {

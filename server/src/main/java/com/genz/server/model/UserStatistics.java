@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * @author Nikos.Toulios
+ */
 @Entity
 @Table(name = "userstatistics")
 @ApiModel(description = "User's statistics")

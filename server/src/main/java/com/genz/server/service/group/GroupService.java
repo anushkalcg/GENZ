@@ -7,6 +7,9 @@ import com.genz.server.service.CommonService;
 
 import java.util.List;
 
+/**
+ * @author Nikos.Toulios
+ */
 public interface GroupService extends CommonService<Group> {
 
     Group addNewUser(Long groupId, Long userId);

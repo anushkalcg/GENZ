@@ -6,6 +6,9 @@ import com.genz.server.model.AbstractEntry;
 
 import java.util.List;
 
+/**
+ * @author Nikos.Toulios
+ */
 public interface CommonService<T extends AbstractEntry> {
 
     T add(T entry);

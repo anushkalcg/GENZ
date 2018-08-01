@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
+/**
+ * @author Nikos.Toulios
+ */
 @MappedSuperclass
 public abstract class AbstractEntry implements Serializable {
 

@@ -6,6 +6,9 @@ import com.genz.server.service.CommonService;
 
 import java.util.List;
 
+/**
+ * @author Nikos.Toulios
+ */
 public interface QuestionService extends CommonService<Question> {
 
     Question addNewAnswer(Long questionId, Answer answer);

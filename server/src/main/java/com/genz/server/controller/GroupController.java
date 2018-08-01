@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * @author Nikos.Toulios
+ */
 @RestController
 @RequestMapping("/api/group")
 @Api(value = "groupManagement", description = "This API is for group management actions")
