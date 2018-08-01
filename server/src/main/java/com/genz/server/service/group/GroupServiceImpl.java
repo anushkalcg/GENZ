@@ -32,15 +32,16 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Group addNewUser(Long groupId, Long userId) {
 
-        if(!userRepository.exists(userId)){
+        User user = userRepository.findOne(userId);
+        if(user == null){
             throw new ResourceNotFoundException("NOT FOUND User with ID:" + userId);
         }
 
         return Optional.ofNullable(groupRepository.findOne(groupId))
                 .map(group -> {
-                    User user = new User();
-                    user.setId(userId);
+
                     //TODO check if there is actual a addition
+                    user.addGroup(group);
                     group.addUser(user);
                     return groupRepository.save(group);
                 })

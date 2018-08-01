@@ -7,13 +7,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name","email","username","password"}) })
 @ApiModel(description = "User's information.")
 public class User extends AbstractEntry{
 
@@ -30,7 +28,7 @@ public class User extends AbstractEntry{
     private String password;
 
     @ApiModelProperty(notes = "User's firstname", required = true)
-    @Column(name = "firstname")
+    @Column(name = "name")
     private String name;
 
     @ApiModelProperty(notes = "User's lastname", required = true)
@@ -176,6 +174,15 @@ public class User extends AbstractEntry{
 
     public void setUserStatistics(UserStatistics userStatistics) {
         this.userStatistics = userStatistics;
+    }
+
+    public void addGroup(Group group){
+        if(groups == null){
+            groups = new ArrayList<>();
+        }
+        if(!groups.contains(group)){
+            groups.add(group);
+        }
     }
 
     @Override

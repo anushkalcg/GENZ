@@ -8,9 +8,11 @@ import com.genz.server.model.UserStatus;
 import com.genz.server.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +31,11 @@ public class UserServiceImpl implements UserService{
     public User add(User entry) {
         validationAdd(entry);
         entry.setUserStatus(UserStatus.NOT_STARTED);
-        return userRepository.save(entry);
+        try {
+            return userRepository.save(entry);
+        }catch(DataIntegrityViolationException e){
+            throw new ResourceValidationException("Duplicate entries - Constraint violation");
+        }
     }
 
     @Override
@@ -77,6 +83,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Group> getGroups(Long userId) {
         return null;
+    }
+
+    @Override
+    public void play(Long UserId) {
+
     }
 
     @Override
@@ -140,7 +151,7 @@ public class UserServiceImpl implements UserService{
 
         int userAge = entry.getAge();
         if(userAge > MAX_AGE || userAge < MIN_AGE){
-            throw new ResourceValidationException("The user's property age should have values between [ " + MAX_AGE + " , " + MIN_AGE + " ]");
+            throw new ResourceValidationException("The user's property age should have values between [ " + MIN_AGE + " , " + MAX_AGE + " ]");
         }
 
         if(StringUtils.isBlank(entry.getUsername())){
