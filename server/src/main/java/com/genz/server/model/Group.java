@@ -10,7 +10,8 @@ import java.util.*;
 
 
 @Entity
-@Table(name = "groups")
+@Table(name = "groups", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"}) })
 @ApiModel(description = "Group model")
 public class Group extends AbstractEntry{
 
@@ -19,11 +20,45 @@ public class Group extends AbstractEntry{
     private String name;
 
 
-    @ApiModelProperty(notes = "Associated questions", required = true)
+    @ApiModelProperty(notes = "Associated questions", required = false)
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="group")
     @OrderBy("priority ASC")
     private List<Question> questions;
 
+    @ApiModelProperty(notes = "Group's user", required = false)
+    @ManyToMany(mappedBy = "groups",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<User> users;
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        if(!users.isEmpty()) {
+            users.forEach(answer -> answer.addGroup(this));
+            this.users = users;
+        }
+    }
+
+    public void addUser(User user) {
+        if(users == null){
+            users = new ArrayList<>();
+        }
+        users.add(user);
+        user.addGroup(this);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+        user.removeGroup(this);
+    }
+
+    public void removeUsers() {
+        for(User user : new ArrayList<>(users)) {
+            removeUser(user);
+        }
+    }
     public Group() {
     }
 

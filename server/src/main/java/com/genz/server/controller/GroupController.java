@@ -69,9 +69,77 @@ public class GroupController {
             @ApiResponse(code = 400, message = "Valdation with request."),
             @ApiResponse(code = 404, message = "The group didnt found.")
     })
-    @PutMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public void deleteGroup(@PathVariable(value = "id") Long id){
         groupService.delete(id);
+    }
+
+    @ApiOperation(value = "Add a new User into the group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The group or the user didnt found.")
+    })
+    @PutMapping(value = "/{id}/users/{user_id}", produces = "application/json;charset=UTF-8")
+    public void addNewUser(@PathVariable(value = "id") Long id,
+                           @PathVariable(value = "user_id") Long userId){
+        groupService.addNewUser(id, userId);
+    }
+
+    @ApiOperation(value = "Remove a User from the group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The group or the user didnt found.")
+    })
+    @DeleteMapping(value = "/{id}/users/{user_id}", produces = "application/json;charset=UTF-8")
+    public void removeUser(@PathVariable(value = "id") Long id,
+                           @PathVariable(value = "user_id") Long userId){
+        groupService.removeUser(id, userId);
+    }
+
+    @ApiOperation(value = "List all the User's from the group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 404, message = "The group didnt found.")
+    })
+    @GetMapping(value = "/{id}/users", produces = "application/json;charset=UTF-8")
+    public void getUsers(@PathVariable(value = "id") Long id){
+        groupService.listUsers(id);
+    }
+
+    @ApiOperation(value = "Add a Question into the group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The group or the question didnt found.")
+    })
+    @PutMapping(value = "/{id}/questions/{question_id}", produces = "application/json;charset=UTF-8")
+    public void addQuestion(@PathVariable(value = "id") Long id,
+                               @PathVariable(value = "question_id") Long questionId){
+        groupService.removeQuestion(id, questionId);
+    }
+
+    @ApiOperation(value = "Remove a Question from the group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The group or the question didnt found.")
+    })
+    @DeleteMapping(value = "/{id}/questions/{question_id}", produces = "application/json;charset=UTF-8")
+    public void removeQuestion(@PathVariable(value = "id") Long id,
+                           @PathVariable(value = "question_id") Long questionId){
+        groupService.removeQuestion(id, questionId);
+    }
+
+    @ApiOperation(value = "List all the Question's from the group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 404, message = "The group didnt found.")
+    })
+    @GetMapping(value = "/{id}/questions", produces = "application/json;charset=UTF-8")
+    public void getQuestions(@PathVariable(value = "id") Long id){
+        groupService.getQuestions(id);
     }
 
 }

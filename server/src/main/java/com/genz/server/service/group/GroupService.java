@@ -6,9 +6,12 @@ import com.genz.server.model.User;
 import com.genz.server.service.CommonService;
 
 import java.util.List;
-import java.util.Set;
 
 public interface GroupService extends CommonService<Group> {
+
+    Group addNewUser(Long groupId, Long userId);
+    Group removeUser(Long groupId, Long userId);
+    public List<User> listUsers(Long groupId);
 
     Group addNewQuestion(Long groupId, Long questionId);
     List<Question> getQuestions(Long groupId);

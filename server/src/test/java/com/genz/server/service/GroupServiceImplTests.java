@@ -3,18 +3,17 @@ package com.genz.server.service;
 import com.genz.server.ServerApplicationTests;
 import com.genz.server.exception.ResourceNotFoundException;
 import com.genz.server.exception.ResourceValidationException;
-import com.genz.server.model.Answer;
-import com.genz.server.model.Group;
-import com.genz.server.model.Question;
+import com.genz.server.model.*;
 import com.genz.server.repository.GroupRepository;
 import com.genz.server.repository.QuestionRepository;
 import com.genz.server.repository.UserRepository;
 import com.genz.server.service.group.GroupServiceImpl;
-import com.genz.server.service.user.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,7 +24,7 @@ public class GroupServiceImplTests extends ServerApplicationTests {
     private GroupServiceImpl groupService;
 
     @Autowired
-    private UserServiceImpl userService;
+    UserRepository userRepository;
 
     @Autowired
     QuestionRepository questionRepository;
@@ -36,8 +35,123 @@ public class GroupServiceImplTests extends ServerApplicationTests {
     @Before
     @Override
     public void setUp(){
+        userRepository.deleteAll();
         groupRepository.deleteAll();
         questionRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    public void addUser_success(){
+        //given
+
+        User user = createUser();
+        user = userRepository.save(user);
+
+        Group group = new Group();
+        group.setName("group");
+        group = groupService.add(group);
+
+        //when
+
+        Group resultedGroup = groupService.addNewUser(group.getId(), user.getId());
+
+
+        //then
+        assertNotNull(resultedGroup);
+        assertFalse(resultedGroup.getUsers().isEmpty());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void addUser_user_not_found(){
+        //given
+
+        //when
+       groupService.addNewUser(10L, 100L);
+
+
+        //then
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void addUser_group_not_found(){
+        //given
+
+        User user = createUser();
+        user = userRepository.save(user);
+
+        //when
+        groupService.addNewUser(10L, user.getId());
+
+
+        //then
+    }
+
+    @Test
+    public void addGroup_success_with_user(){
+        //given
+
+        User user = createUser();
+
+        Group group = new Group();
+        group.setName("group");
+        group.addUser(user);
+
+        //when
+        Group resultedGroup = groupService.add(group);
+
+
+        //then
+        assertNotNull(resultedGroup);
+        assertFalse(resultedGroup.getUsers().isEmpty());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void removeUser_user_not_found(){
+        //given
+
+        //when
+        groupService.removeUser(10L, 100L);
+
+
+        //then
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void removeUser_group_not_found(){
+        //given
+
+        User user = createUser();
+        user = userRepository.save(user);
+
+        //when
+        groupService.removeUser(10L, user.getId());
+
+        //then
+    }
+
+    @Test
+    public void removeUser_success_with_user(){
+        //given
+
+        User user = createUser();
+
+        Group group = new Group();
+        group.setName("group");
+        group.addUser(user);
+
+        Group resultedGroup = groupService.add(group);
+
+        assertNotNull(resultedGroup);
+        assertFalse(resultedGroup.getUsers().isEmpty());
+
+        //when
+
+        resultedGroup = groupService.removeUser(resultedGroup.getId(), resultedGroup.getUsers().get(0).getId());
+
+        //then
+        assertNotNull(resultedGroup);
+        assertTrue(resultedGroup.getUsers().isEmpty());
     }
 
     @Test
@@ -64,7 +178,6 @@ public class GroupServiceImplTests extends ServerApplicationTests {
     @Test(expected = ResourceNotFoundException.class)
     public void addNewQuestion_question_not_found(){
         //given
-
 
 
         //when
@@ -230,6 +343,25 @@ public class GroupServiceImplTests extends ServerApplicationTests {
         //then
     }
 
+    @Test(expected = ResourceValidationException.class)
+    public void addGroup_double_entries(){
+        //given
+
+        Group group = new Group();
+        group.setName("group");
+
+        groupService.add(group);
+
+        Group group2 = new Group();
+        group2.setName("group");
+
+        //when
+
+        groupService.add(group2);
+
+        //then
+    }
+
     @Test
     public void addGroup_success(){
         //given
@@ -368,6 +500,23 @@ public class GroupServiceImplTests extends ServerApplicationTests {
         answer.setPoints(100);
         answer.setText("answer");
         return answer;
+    }
+
+    private User createUser(){
+        return new User(
+                0,
+                "email",
+                "password",
+                "name",
+                "surname",
+                19,
+                "0044787777",
+                "username",
+                UserStatus.NOT_STARTED,
+                new ArrayList<>(),
+                null
+
+        );
     }
 
 }

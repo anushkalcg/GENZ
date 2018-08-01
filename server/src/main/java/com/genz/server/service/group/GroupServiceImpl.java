@@ -10,6 +10,7 @@ import com.genz.server.repository.QuestionRepository;
 import com.genz.server.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,6 +30,45 @@ public class GroupServiceImpl implements GroupService{
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Override
+    public Group addNewUser(Long groupId, Long userId) {
+        User user = userRepository.findOne(userId);
+        if(user == null){
+            throw new ResourceNotFoundException("NOT FOUND User with ID:" + user);
+        }
+
+        return Optional.ofNullable(groupRepository.findOne(groupId))
+                .map(group -> {
+                    group.addUser(user);
+                    return groupRepository.save(group);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + groupId));
+    }
+
+    @Override
+    public Group removeUser(Long groupId, Long userId) {
+        User user = userRepository.findOne(userId);
+        if(user == null){
+            throw new ResourceNotFoundException("NOT FOUND User with ID:" + user);
+        }
+
+        return Optional.ofNullable(groupRepository.findOne(groupId))
+                .map(group -> {
+                    group.removeUser(user);
+                    return groupRepository.save(group);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + groupId));
+    }
+
+    @Override
+    public List<User> listUsers(Long groupId) {
+        return Optional.ofNullable(groupRepository.findOne(groupId))
+                .map(group -> {
+                    return group.getUsers();
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + groupId));
+    }
 
     @Override
     public Group addNewQuestion(Long groupId, Long questionId) {
@@ -71,8 +111,15 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Group add(Group entry) {
-        validationAdd(entry);
-        return groupRepository.save(entry);
+        try {
+            validationAdd(entry);
+            if (entry.getUsers() != null) {
+                entry.getUsers().forEach(user -> user.addGroup(entry));
+            }
+            return groupRepository.save(entry);
+        }catch(DataIntegrityViolationException e){
+            throw new ResourceValidationException("Duplicate entries - Constraint violation");
+        }
     }
 
     @Override
@@ -113,6 +160,7 @@ public class GroupServiceImpl implements GroupService{
         if(entry.getId() != null){
             throw new ResourceValidationException("The value of group ID should be NULL");
         }
+
         validationEntryProperties(entry);
     }
 

@@ -11,7 +11,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name","email","username","password"}) })
+        @UniqueConstraint(columnNames = {"email","username"}) })
 @ApiModel(description = "User's information.")
 public class User extends AbstractEntry{
 
@@ -51,21 +51,25 @@ public class User extends AbstractEntry{
     @Column(name = "user_status")
     private UserStatus userStatus;
 
-    @ApiModelProperty(notes = "Groups where user is member", required = true)
+    @ApiModelProperty(notes = "Groups where user is member", required = false)
     @ManyToMany(
-            fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             },
             targetEntity = Group.class)
     @JoinTable(name = "users_groups",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    @JsonIgnore
+            joinColumns = { @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "id")
+            },
+            inverseJoinColumns = { @JoinColumn(
+                    name = "group_id",
+                    referencedColumnName = "id")
+    })
     private List<Group> groups;
 
-    @ApiModelProperty(notes = "User's statistics", required = true)
+    @ApiModelProperty(notes = "User's statistics", required = false)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private UserStatistics userStatistics;
@@ -185,44 +189,12 @@ public class User extends AbstractEntry{
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        User user = (User) o;
-        return Objects.equals(score, user.score) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                Objects.equals(age, user.age) &&
-                Objects.equals(phoneNumber, user.phoneNumber) &&
-                Objects.equals(username, user.username) &&
-                userStatus == user.userStatus &&
-                Objects.equals(userStatistics, user.userStatistics);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(super.hashCode(), score, email, password, name, surname, age, phoneNumber, username, userStatus, userStatistics);
-
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "score=" + score +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", username='" + username + '\'' +
-                ", userStatus=" + userStatus +
-                ", userStatistics=" + userStatistics +
-                '}';
+    public void removeGroup(Group group){
+        if(groups == null){
+            return;
+        }
+        if(groups.contains(group)){
+            groups.add(group);
+        }
     }
 }
