@@ -7,7 +7,7 @@ The project implements the logic for a sport prediction game.
 ## Prerequisites
 - JDK 1.8 (Oracle)
 - Maven 3
-- MySQL
+- PostreSQL 9.6.9
 
 ## Installation 
 
@@ -22,7 +22,7 @@ mvn spring-boot:run
 
 ## Url to interact with Swagger
 ```
-http://localhost:8086/swagger-ui.html
+http://localhost:8088/swagger-ui.html
 ```
 
 ## The format of the User model should be:
