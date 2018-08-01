@@ -1,12 +1,13 @@
 package com.genz.server.model;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @author Nikos.Toulios
+ */
 public class UserStatisticsEntry implements Serializable {
     private static final long serialVersionUID = -1478129777799352997L;
 

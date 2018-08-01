@@ -1,6 +1,5 @@
 package com.genz.server;
 
-import com.genz.server.ServerApplication;
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,6 +15,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
+/**
+ * @author Nikos.Toulios
+ */
 @Configuration
 @EnableSwagger2
 @ComponentScan(basePackageClasses = ServerApplication.class)

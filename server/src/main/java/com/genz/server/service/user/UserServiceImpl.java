@@ -2,7 +2,6 @@ package com.genz.server.service.user;
 
 import com.genz.server.exception.ResourceNotFoundException;
 import com.genz.server.exception.ResourceValidationException;
-import com.genz.server.model.Group;
 import com.genz.server.model.User;
 import com.genz.server.model.UserStatus;
 import com.genz.server.repository.UserRepository;
@@ -12,10 +11,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * @author Nikos.Toulios
+ */
 @Service
 @Transactional
 public class UserServiceImpl implements UserService{

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Nikos.Toulios
+ */
 @RestController
 @RequestMapping("/api/user")
 @Api(value = "userManagement", description = "This API is for user management actions")

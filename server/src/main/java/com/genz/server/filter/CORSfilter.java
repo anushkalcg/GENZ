@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static javax.management.timer.Timer.ONE_HOUR;
-
+/**
+ * @author Nikos.Toulios
+ */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CORSfilter implements Filter {

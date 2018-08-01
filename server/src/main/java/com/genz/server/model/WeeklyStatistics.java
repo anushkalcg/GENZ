@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author Nikos.Toulios
+ */
 public class WeeklyStatistics implements Serializable {
 
 
