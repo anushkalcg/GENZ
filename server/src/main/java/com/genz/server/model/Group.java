@@ -64,6 +64,7 @@ public class Group extends AbstractEntry{
         if(questions == null){
             questions = new ArrayList<>();
         }
+        question.setGroup(this);
         questions.add(question);
     }
 
@@ -71,6 +72,12 @@ public class Group extends AbstractEntry{
         if(users == null){
             users = new ArrayList<>();
         }
+
+        if(user.getGroups() == null){
+            List<Group> groups = new ArrayList<>();
+            user.setGroups(groups);
+        }
+        user.getGroups().add(this);
         users.add(user);
     }
 
@@ -110,9 +117,7 @@ public class Group extends AbstractEntry{
     @Override
     public String toString() {
         return "Group{" +
-                "users=" + users +
                 ", name='" + name + '\'' +
-                ", questions=" + questions +
                 '}';
     }
 }

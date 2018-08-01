@@ -3,26 +3,30 @@ package com.genz.server.model;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class UserStatisticsEntry implements Serializable {
     private static final long serialVersionUID = -1478129777799352997L;
 
-    private Map<Integer, Pair<UserQuestionAnswer,Integer>> userQuestionAnswers;
+    /**
+     * pair of number of week an object that holds WeekAnswers and points
+     */
+    private Map<Integer, List<WeeklyStatistics>> userQuestionAnswers;
 
     public UserStatisticsEntry() {
     }
 
-    public UserStatisticsEntry(Map<Integer, Pair<UserQuestionAnswer, Integer>> userQuestionAnswers) {
+    public UserStatisticsEntry(Map<Integer, List<WeeklyStatistics>> userQuestionAnswers) {
         this.userQuestionAnswers = userQuestionAnswers;
     }
 
-    public Map<Integer, Pair<UserQuestionAnswer, Integer>> getUserQuestionAnswers() {
+    public Map<Integer, List<WeeklyStatistics>> getUserQuestionAnswers() {
         return userQuestionAnswers;
     }
 
-    public void setUserQuestionAnswers(Map<Integer, Pair<UserQuestionAnswer, Integer>> userQuestionAnswers) {
+    public void setUserQuestionAnswers(Map<Integer, List<WeeklyStatistics>> userQuestionAnswers) {
         this.userQuestionAnswers = userQuestionAnswers;
     }
 

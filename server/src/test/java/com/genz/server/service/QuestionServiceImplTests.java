@@ -7,6 +7,7 @@ import com.genz.server.model.Answer;
 import com.genz.server.model.Question;
 import com.genz.server.repository.QuestionRepository;
 import com.genz.server.service.question.QuestionServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,7 @@ public class QuestionServiceImplTests extends ServerApplicationTests {
     @Autowired
     QuestionRepository questionRepository;
 
+    @Before
     @Override
     public void setUp(){
         questionRepository.deleteAll();

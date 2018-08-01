@@ -9,4 +9,5 @@ import java.util.List;
 public interface UserService extends CommonService<User> {
     User login(String username, String password);
     List<Group> getGroups(Long userId);
+    void play(Long UserId);
 }
