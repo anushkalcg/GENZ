@@ -14,16 +14,14 @@ import java.util.*;
 @ApiModel(description = "Group model")
 public class Group extends AbstractEntry{
 
-    @ApiModelProperty(notes = "Associated users")
-    @ManyToMany(mappedBy = "groups", targetEntity = User.class)
-    private List<User> users;
-
     @ApiModelProperty(notes = "Group's name", required = true)
     @Column(name = "name")
     private String name;
 
+
     @ApiModelProperty(notes = "Associated questions", required = true)
-    @OneToMany(mappedBy="group")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="group")
+    @OrderBy("priority ASC")
     private List<Question> questions;
 
     public Group() {
@@ -31,17 +29,8 @@ public class Group extends AbstractEntry{
 
     public Group(List<User> users, String name, List<Question> questions) {
         this();
-        this.users = users;
         this.name = name;
         this.questions = questions;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     public String getName() {
@@ -57,7 +46,10 @@ public class Group extends AbstractEntry{
     }
 
     public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+        if(!questions.isEmpty()) {
+            questions.forEach(question -> question.setGroup(this));
+            this.questions = questions;
+        }
     }
 
     public void addQuestion(Question question){
@@ -66,27 +58,6 @@ public class Group extends AbstractEntry{
         }
         question.setGroup(this);
         questions.add(question);
-    }
-
-    public void addUser(User user){
-        if(users == null){
-            users = new ArrayList<>();
-        }
-
-        if(user.getGroups() == null){
-            List<Group> groups = new ArrayList<>();
-            user.setGroups(groups);
-        }
-        user.getGroups().add(this);
-        users.add(user);
-    }
-
-    public void removeUser(User user){
-        if(users != null){
-           if(users.contains(user)){
-               users.remove(user);
-           }
-        }
     }
 
     public void removeQuestion(Question question){
@@ -103,15 +74,14 @@ public class Group extends AbstractEntry{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Group group = (Group) o;
-        return Objects.equals(users, group.users) &&
-                Objects.equals(name, group.name) &&
+        return Objects.equals(name, group.name) &&
                 Objects.equals(questions, group.questions);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), users, name, questions);
+        return Objects.hash(super.hashCode(), name, questions);
     }
 
     @Override

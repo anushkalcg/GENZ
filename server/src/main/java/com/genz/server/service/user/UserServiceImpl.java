@@ -80,10 +80,6 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
-    @Override
-    public List<Group> getGroups(Long userId) {
-        return null;
-    }
 
     @Override
     public void play(Long UserId) {
