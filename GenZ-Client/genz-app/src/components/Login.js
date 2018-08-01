@@ -1,59 +1,74 @@
-import React, { Component, input, view, button, form } from 'react';
-import logo from '../football.jpg';
-import '../App.css';
-import { Button } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import SideNav, {MenuIcon} from 'react-simple-sidenav';
- 
+import React, { Component } from 'react';
+import CustomButton from './CustomButton';
+import './Login.css'
+import Header from './Header'
+import {Redirect} from 'react-router-dom'
+import axios from 'axios'
 
 
 class Login extends Component {
-  
+
+  constructor(props) {
+    super(props)
+    this.state = {
+    username: '',
+    password: '',
+    status: ''
+    }
+    this.handleChangedUsername=this.handleChangedUsername.bind(this);
+    this.handleChangedPassword=this.handleChangedPassword.bind(this);
+    this.loginRequest=this.loginRequest.bind(this);
+
+  }
+
+  handleChangedUsername(event){
+    this.setState({username: event.target.value})
+  }
+
+  handleChangedPassword(event){
+    this.setState({password: event.target.value})
+  }
+
+  loginRequest(){
+    
+    const url = 'http://localhost:8088/api/login?password='+this.state.password+'&username='+this.state.username
+    axios.get(url).then(res=>this.props.history.push("/play")).catch(function(error){
+      console.log(error)
+    })
+    console.log(this.state.username);
+    console.log(this.state.status)
+    // if (this.state.data.status === 200){
+    //   console.log('je')
+      
+    // }
+
+  }
+
   render() {
     return (
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center text-white mb-4">Bootstrap 4 Login Form</h2>
-                    <div class="row">
-                        <div class="col-md-6 mx-auto">
-                            <div class="card rounded-0">
-                                <div class="card-header">
-                                    <h3 class="mb-0">Login</h3>
-                                </div>
-                                <div class="card-body">
-                                    <form class="form" role="form" autocomplete="off" id="formLogin" novalidate="" method="POST">
-                                        <div class="form-group">
-                                            <label for="uname1">Username</label>
-                                            <input type="text" class="form-control form-control-lg rounded-0" name="uname1" id="uname1" required=""/>
-                                            <div class="invalid-feedback">Oops, you missed this one.</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Password</label>
-                                            <input type="password" class="form-control form-control-lg rounded-0" id="pwd1" required="" autocomplete="new-password"/>
-                                            <div class="invalid-feedback">Enter your password too!</div>
-                                        </div>
-                                        {/* <div>
-                                            <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input"/>
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description small text-dark">Remember me on this computer</span>
-                                            </label>
-                                        </div> */}
-                                        <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin" onClick={() => {document.location.href = "./Login.js";}}>Login</button>
-                                    </form>
-                                </div>
-                            </div>
-                    
-
-                        </div>
-
-
-                    </div>
-                    
-                </div>
-            </div>
+      <div>
+        <Header/>
+      <div className="Login">
+        <div className="login">
+          <div className="row"> 
+            <div className="col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
+              <h1>Get Read To Play</h1>
+              <form role="form" className="ng-pristine ng-valid"> 
+                <div className="form-content"> 
+                  <div className="form-group"> 
+                    <input type="text" className="form-control input-underline input-lg" placeholder="Username" value={this.state.username} onChange={(e) => this.handleChangedUsername(e)}/> 
+                  </div> 
+                  <div className="form-group"> 
+                    <input type="password" className="form-control input-underline input-lg" placeholder="Password" value={this.state.password} onChange={(e) => this.handleChangedPassword(e)}/> 
+                  </div> 
+                </div> 
+                <CustomButton buttonText="Login" onClick={this.loginRequest}/>
+              </form> 
+            </div> 
+          </div> 
         </div>
+      </div>
+      </div>
     );
   }
 }

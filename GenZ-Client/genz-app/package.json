@@ -1,19 +1,19 @@
 {
-  "name": "genz-app",
+  "name": "two",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.1.2",
-    "mobx-react": "^5.2.3",
+    "ajv": "^6.5.2",
+    "axios": "^0.18.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
-    "react-bootstrap-table-next": "^0.1.15",
     "react-dom": "^16.4.1",
-    "react-router": "^4.3.1",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
-    "react-simple-sidenav": "^1.0.1",
-    "reactstrap": "^6.3.0",
-    "startbootstrap-simple-sidebar": "^4.1.1"
+    "redux": "^2.0.0",
+    "redux-saga": "^0.16.0",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
