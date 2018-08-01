@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/group")
 @Api(value = "groupManagement", description = "This API is for group management actions")
@@ -73,27 +74,4 @@ public class GroupController {
         groupService.delete(id);
     }
 
-    @ApiOperation(value = "Add a user in the group")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Returns the group info"),
-            @ApiResponse(code = 400, message = "Valdation with request."),
-            @ApiResponse(code = 404, message = "The group or the user didnt found.")
-    })
-    @PutMapping(value = "/{id}/user/{user_id}", produces = "application/json;charset=UTF-8")
-    public Group addUser(@PathVariable(value = "id") Long id,
-                             @PathVariable(value = "user_id") Long userId){
-        return groupService.addNewUser(id, userId);
-    }
-
-    @ApiOperation(value = "Remove a user from the group")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Returns the group info"),
-            @ApiResponse(code = 400, message = "Valdation with request."),
-            @ApiResponse(code = 404, message = "The group or the user didnt found.")
-    })
-    @DeleteMapping(value = "/{id}/user/{user_id}", produces = "application/json;charset=UTF-8")
-    public Group removeUser(@PathVariable(value = "id") Long id,
-                         @PathVariable(value = "user_id") Long userId){
-        return groupService.removeUser(id, userId);
-    }
 }

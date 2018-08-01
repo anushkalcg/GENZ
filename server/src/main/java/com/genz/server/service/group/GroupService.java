@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface GroupService extends CommonService<Group> {
-    Group addNewUser(Long groupId, Long userId);
-    List<User> getUsers(Long groupId);
-    Group removeUser(Long groupId, Long userId);
 
     Group addNewQuestion(Long groupId, Long questionId);
     List<Question> getQuestions(Long groupId);

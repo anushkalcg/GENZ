@@ -8,6 +8,7 @@ import com.genz.server.model.User;
 import com.genz.server.repository.GroupRepository;
 import com.genz.server.repository.QuestionRepository;
 import com.genz.server.repository.UserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,61 +31,14 @@ public class GroupServiceImpl implements GroupService{
     QuestionRepository questionRepository;
 
     @Override
-    public Group addNewUser(Long groupId, Long userId) {
-
-        User user = userRepository.findOne(userId);
-        if(user == null){
-            throw new ResourceNotFoundException("NOT FOUND User with ID:" + userId);
-        }
-
-        return Optional.ofNullable(groupRepository.findOne(groupId))
-                .map(group -> {
-
-                    //TODO check if there is actual a addition
-                    user.addGroup(group);
-                    group.addUser(user);
-                    return groupRepository.save(group);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + groupId));
-    }
-
-    @Override
-    public List<User> getUsers(Long groupId) {
-        return Optional.ofNullable(groupRepository.findOne(groupId))
-                .map(group -> {
-                    return group.getUsers();
-                })
-                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + groupId));
-    }
-
-    @Override
-    public Group removeUser(Long groupId, Long userId) {
-        if(!userRepository.exists(userId)){
-            throw new ResourceNotFoundException("NOT FOUND User with ID:" + userId);
-        }
-
-        return Optional.ofNullable(groupRepository.findOne(groupId))
-                .map(group -> {
-                    User user = new User();
-                    user.setId(userId);
-                    //TODO check if there is actual a deletion
-                    group.removeUser(user);
-                    return groupRepository.save(group);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + groupId));
-    }
-
-    @Override
     public Group addNewQuestion(Long groupId, Long questionId) {
-        if(!questionRepository.exists(questionId)){
+        Question question = questionRepository.findOne(questionId);
+        if(question == null){
             throw new ResourceNotFoundException("NOT FOUND Question with ID:" + questionId);
         }
 
         return Optional.ofNullable(groupRepository.findOne(groupId))
                 .map(group -> {
-                    Question question = new Question();
-                    question.setId(questionId);
-                    //TODO check if there is actual a addition
                     group.addQuestion(question);
                     return groupRepository.save(group);
                 })
@@ -102,15 +56,13 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Group removeQuestion(Long groupId, Long questionId) {
-        if(!questionRepository.exists(questionId)){
+        Question question = questionRepository.findOne(questionId);
+        if(question == null){
             throw new ResourceNotFoundException("NOT FOUND Question with ID:" + questionId);
         }
 
         return Optional.ofNullable(groupRepository.findOne(groupId))
                 .map(group -> {
-                    Question question = new Question();
-                    question.setId(questionId);
-                    //TODO check if there is actual a deletion
                     group.removeQuestion(question);
                     return groupRepository.save(group);
                 })
@@ -119,6 +71,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Group add(Group entry) {
+        validationAdd(entry);
         return groupRepository.save(entry);
     }
 
@@ -129,9 +82,10 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Group update(Group entry) {
+        validationUpdate(entry);
         return Optional.ofNullable(groupRepository.findOne(entry.getId()))
                 .map(group -> {
-                    return groupRepository.save(group);
+                    return groupRepository.save(entry);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with ID:" + entry.getId()));
     }
@@ -152,16 +106,35 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public void validationAdd(Group entry) throws ResourceValidationException {
+        if(entry == null){
+            throw new ResourceValidationException("The value of group should not be NULL");
+        }
 
+        if(entry.getId() != null){
+            throw new ResourceValidationException("The value of group ID should be NULL");
+        }
+        validationEntryProperties(entry);
     }
 
     @Override
     public void validationUpdate(Group entry) throws ResourceValidationException, ResourceNotFoundException {
+        if(entry == null){
+            throw new ResourceValidationException("The value of group should not be NULL");
+        }
 
+        if(entry.getId() == null){
+            throw new ResourceValidationException("The value of group ID should not be NULL");
+        }
+
+        if(!groupRepository.exists(entry.getId())){
+            throw new ResourceNotFoundException("Group didnt found for ID: "+ entry.getId());
+        }
     }
 
     @Override
     public void validationEntryProperties(Group entry) {
-
+        if(StringUtils.isBlank(entry.getName())){
+            throw new ResourceValidationException("The value of group name should not be blank");
+        }
     }
 }
