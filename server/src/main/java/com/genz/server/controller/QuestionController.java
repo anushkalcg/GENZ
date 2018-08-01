@@ -29,7 +29,7 @@ public class QuestionController {
             @ApiResponse(code = 404, message = "The question didnt found.")
     })
     @GetMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
-    public Question getGroup(@PathVariable(value = "id") Long id){
+    public Question getQuestion(@PathVariable(value = "id") Long id){
         return questionService.get(id);
     }
 
@@ -64,26 +64,38 @@ public class QuestionController {
         return questionService.update(question);
     }
 
-    @ApiOperation(value = "Delete a group")
+    @ApiOperation(value = "Delete a question")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the question info"),
             @ApiResponse(code = 400, message = "Valdation with request."),
             @ApiResponse(code = 404, message = "The question didnt found.")
     })
-    @PutMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/{id}", produces = "application/json;charset=UTF-8")
     public void deleteQuestion(@PathVariable(value = "id") Long id){
         questionService.delete(id);
     }
 
-    @ApiOperation(value = "Delete a group")
+    @ApiOperation(value = "Add a new Answer into the question")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the question info"),
             @ApiResponse(code = 400, message = "Valdation with request."),
             @ApiResponse(code = 404, message = "The question didnt found.")
     })
     @PutMapping(value = "/{id}/answer", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
-    public void addQuestion(@PathVariable(value = "id") Long id,
+    public void addAnswer(@PathVariable(value = "id") Long id,
                                @RequestBody Answer answer){
         questionService.addNewAnswer(id, answer);
+    }
+
+    @ApiOperation(value = "Delete an answer")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the question info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The question didnt found.")
+    })
+    @DeleteMapping(value = "/{id}/answers/{answer_id}", produces = "application/json;charset=UTF-8")
+    public void deleteQuestion(@PathVariable(value = "id") Long id,
+                               @PathVariable(value = "answer_id") Long answerId){
+        questionService.removeAnswer(id, answerId);
     }
 }

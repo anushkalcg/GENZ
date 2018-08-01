@@ -69,7 +69,7 @@ public class UserController {
             @ApiResponse(code = 400, message = "Valdation with request."),
             @ApiResponse(code = 404, message = "The user didnt found.")
     })
-    @PutMapping(value = "/{id}",  produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/{id}",  produces = "application/json;charset=UTF-8")
     public void deleteUser(@PathVariable(value = "id") Long id){
         userService.delete(id);
     }

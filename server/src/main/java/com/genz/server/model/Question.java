@@ -22,17 +22,17 @@ public class Question extends AbstractEntry{
     @Column(name = "priority")
     private Integer priority;
 
-    @ApiModelProperty(notes = "Question's correct answer id", required = true)
+    @ApiModelProperty(notes = "Question's correct answer id", required = false)
     @Column(name = "correct_answer_id")
     private Integer correctAswer;
 
-    @ApiModelProperty(notes = "Associated group", required = true)
+    @ApiModelProperty(notes = "Associated group", required = false)
     @ManyToOne
     @JoinColumn(name="group_id")
     @JsonIgnore
     private Group group;
 
-    @ApiModelProperty(notes = "Associated answers", required = true)
+    @ApiModelProperty(notes = "Associated answers", required = false)
     @OneToMany(fetch = FetchType.EAGER, mappedBy="question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
