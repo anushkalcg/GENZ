@@ -101,4 +101,16 @@ public class QuestionController {
                                @PathVariable(value = "answer_id") Long answerId){
         questionService.removeAnswer(id, answerId);
     }
+
+    @ApiOperation(value = "Set the correct answer to the question")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the question info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The question or answer didnt found.")
+    })
+    @PutMapping(value = "/{id}/answer/correct", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
+    public Question setCorrectAnswer(@PathVariable(value = "id") Long questionId,
+                                     @RequestParam(value = "answer_id", required = true) Long answerId){
+        return questionService.setCorrectAnswer(questionId, answerId);
+    }
 }

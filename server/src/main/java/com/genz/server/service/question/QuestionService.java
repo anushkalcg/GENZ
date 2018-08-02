@@ -14,4 +14,5 @@ public interface QuestionService extends CommonService<Question> {
     Question addNewAnswer(Long questionId, Answer answer);
     List<Answer> getAnswers(Long questionId);
     Question removeAnswer(Long questionId, Long answerId);
+    Question setCorrectAnswer(Long qouestionId, Long answerId);
 }

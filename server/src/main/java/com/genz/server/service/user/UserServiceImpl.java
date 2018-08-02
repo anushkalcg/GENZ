@@ -6,10 +6,13 @@ import com.genz.server.model.User;
 import com.genz.server.model.UserStatus;
 import com.genz.server.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService{
 
+    private static String SECRET_KEY = "secret_key";
     private static final int MAX_AGE = 100;
     private static final int MIN_AGE = 18;
     private static final int DEFAULT_USER_SCORE = 0;
@@ -31,6 +35,16 @@ public class UserServiceImpl implements UserService{
     public User add(User entry) {
         validationAdd(entry);
         entry.setUserStatus(UserStatus.NOT_STARTED);
+
+        String encryptedPassword = null;
+        try {
+            encryptedPassword = encrypt(entry.getPassword(), SECRET_KEY);
+            entry.setPassword(encryptedPassword);
+        } catch (Exception e) {
+            throw new ResourceValidationException("Problem with the encryption of the password");
+        }
+
+
         try {
             return userRepository.save(entry);
         }catch(DataIntegrityViolationException e){
@@ -70,6 +84,14 @@ public class UserServiceImpl implements UserService{
     public User login(String username, String password) {
         if(StringUtils.isBlank(username) || StringUtils.isBlank(password)){
             throw new ResourceValidationException("Username and password values should not be empty");
+        }
+
+        String encryptedPassword = null;
+        try {
+            encryptedPassword = encrypt(password, SECRET_KEY);
+            password = encryptedPassword;
+        } catch (Exception e) {
+            throw new ResourceValidationException("Problem with the encryption of the password");
         }
 
         User user = userRepository.findOneByUsernameAndPassword(username, password);
@@ -153,5 +175,40 @@ public class UserServiceImpl implements UserService{
         if(StringUtils.isBlank(entry.getUsername())){
             throw new ResourceValidationException("The user's property username should not be null or empty for addition.");
         }
+    }
+
+    private String encrypt(String strClearText,String strKey) throws Exception{
+        String strData="";
+
+        try {
+            SecretKeySpec skeyspec=new SecretKeySpec(strKey.getBytes(),"Blowfish");
+            Cipher cipher=Cipher.getInstance("Blowfish");
+            cipher.init(Cipher.ENCRYPT_MODE, skeyspec);
+            byte[] encrypted=cipher.doFinal(strClearText.getBytes());
+            strData = Base64.encodeBase64String(encrypted);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        return strData;
+    }
+
+    public static String decrypt(String strEncrypted,String strKey) throws Exception{
+        String strData="";
+
+        try {
+            SecretKeySpec skeyspec=new SecretKeySpec(strKey.getBytes(),"Blowfish");
+            Cipher cipher=Cipher.getInstance("Blowfish");
+            cipher.init(Cipher.DECRYPT_MODE, skeyspec);
+            byte[] decrypted=cipher.doFinal(strEncrypted.getBytes());
+            strData=new String(decrypted);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        return strData;
     }
 }

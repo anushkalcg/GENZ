@@ -1,5 +1,8 @@
 package com.genz.server.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -7,12 +10,16 @@ import java.util.Objects;
 /**
  * @author Nikos.Toulios
  */
+@ApiModel(description = "User's weekly choice")
 public class WeeklyStatistics implements Serializable {
 
 
     private static final long serialVersionUID = 1938223562217517672L;
 
+    @ApiModelProperty(notes = "User's weekly points", required = true)
     private Integer points;
+
+    @ApiModelProperty(notes = "User's weekly choices", required = true)
     private List<UserQuestionAnswer> userQuestionAnswers;
 
     public WeeklyStatistics() {

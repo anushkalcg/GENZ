@@ -13,11 +13,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Nikos.Toulios
+ */
 public class GroupServiceImplTests extends ServerApplicationTests {
 
     @Autowired
@@ -485,38 +487,4 @@ public class GroupServiceImplTests extends ServerApplicationTests {
 
         assertFalse(groupRepository.exists(resultGroup.getId()));
     }
-
-    private Question createDefaultQuestion() {
-        Question question = new Question();
-        question.setPriority(1);
-        question.setText("question");
-        return question;
-    }
-
-    private Answer createDefaultAnswer() {
-        Answer answer = new Answer();
-        answer.setOdds(0.01);
-        answer.setPriority(1);
-        answer.setPoints(100);
-        answer.setText("answer");
-        return answer;
-    }
-
-    private User createUser(){
-        return new User(
-                0,
-                "email",
-                "password",
-                "name",
-                "surname",
-                19,
-                "0044787777",
-                "username",
-                UserStatus.NOT_STARTED,
-                new ArrayList<>(),
-                null
-
-        );
-    }
-
 }

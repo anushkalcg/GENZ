@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface CommonService<T extends AbstractEntry> {
 
-    T add(T entry);
+    T add(T entry) throws Exception;
     List<T> listAll();
     T update(T entry);
     void delete(Long id);

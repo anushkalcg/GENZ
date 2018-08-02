@@ -1,7 +1,6 @@
 package com.genz.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -24,10 +23,6 @@ public class Answer extends AbstractEntry {
     @Column(name = "priority")
     private Integer priority;
 
-    @ApiModelProperty(notes = "Answer's points", required = true)
-    @Column(name = "points")
-    private Integer points;
-
     @ApiModelProperty(notes = "Answer's odds", required = true)
     @Column(name = "odds")
     private double odds;
@@ -45,7 +40,6 @@ public class Answer extends AbstractEntry {
         this();
         this.text = text;
         this.priority = priority;
-        this.points = points;
         this.odds = odds;
         this.question = question;
     }
@@ -64,14 +58,6 @@ public class Answer extends AbstractEntry {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
-    }
-
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
     }
 
     public double getOdds() {
@@ -98,14 +84,13 @@ public class Answer extends AbstractEntry {
         Answer answer = (Answer) o;
         return Double.compare(answer.odds, odds) == 0 &&
                 Objects.equals(text, answer.text) &&
-                Objects.equals(priority, answer.priority) &&
-                Objects.equals(points, answer.points);
+                Objects.equals(priority, answer.priority);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), text, priority, points, odds);
+        return Objects.hash(super.hashCode(), text, priority, odds);
     }
 
     @Override
@@ -113,7 +98,6 @@ public class Answer extends AbstractEntry {
         return "Answer{" +
                 "text='" + text + '\'' +
                 ", priority=" + priority +
-                ", points=" + points +
                 ", odds=" + odds +
                 '}';
     }

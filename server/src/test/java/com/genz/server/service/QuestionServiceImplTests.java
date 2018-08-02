@@ -15,6 +15,9 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Nikos.Toulios
+ */
 public class QuestionServiceImplTests extends ServerApplicationTests {
 
     @Autowired
@@ -241,19 +244,107 @@ public class QuestionServiceImplTests extends ServerApplicationTests {
 
     }
 
-    private Question createDefaultQuestion() {
-        Question question = new Question();
-        question.setPriority(1);
-        question.setText("question");
-        return question;
+    @Test(expected = ResourceNotFoundException.class)
+    public void setCorrectAnswer_not_found_question(){
+        //given
+
+
+
+        //when
+        questionService.setCorrectAnswer(1l, 10L);
+
+
+        //then
     }
 
-    private Answer createDefaultAnswer() {
-        Answer answer = new Answer();
-        answer.setOdds(0.01);
-        answer.setPriority(1);
-        answer.setPoints(100);
-        answer.setText("answer");
-        return answer;
+    @Test(expected = ResourceNotFoundException.class)
+    public void setCorrectAnswer_not_found_answer(){
+        //given
+
+        Question question = createDefaultQuestion();
+        Answer answer = createDefaultAnswer();
+        question.addAnswer(answer);
+        question = questionRepository.save(question);
+
+        //when
+        questionService.setCorrectAnswer(question.getId(), 10l);
+
+
+        //then
     }
+
+    @Test(expected = ResourceValidationException.class)
+    public void setCorrectAnswer_not_associated_answer(){
+        //given
+
+        Question question = createDefaultQuestion();
+        Answer answer = createDefaultAnswer();
+        question.addAnswer(answer);
+        question = questionRepository.save(question);
+
+        Question question2 = createDefaultQuestion();
+        Answer answer2 = createDefaultAnswer();
+        question2.addAnswer(answer2);
+        question2 = questionRepository.save(question2);
+
+        //when
+        questionService.setCorrectAnswer(question.getId(), question2.getAnswers().get(0).getId());
+
+
+        //then
+    }
+
+    @Test(expected = ResourceValidationException.class)
+    public void setCorrectAnswer_question_does_not_have_answers_1(){
+        //given
+
+        Question question = createDefaultQuestion();
+        question = questionRepository.save(question);
+
+        //when
+        questionService.setCorrectAnswer(question.getId(), 1l);
+
+
+        //then
+    }
+
+    @Test(expected = ResourceValidationException.class)
+    public void setCorrectAnswer_question_does_not_have_answers_2(){
+        //given
+
+        Question question = createDefaultQuestion();
+        question.setAnswers(new ArrayList<>());
+        question = questionRepository.save(question);
+
+        //when
+        questionService.setCorrectAnswer(question.getId(), 1l);
+
+
+        //then
+    }
+
+    @Test
+    public void setCorrectAnswer_success(){
+        //given
+
+        Question question = createDefaultQuestion();
+        Answer answer = createDefaultAnswer();
+        Answer answer2 = createDefaultAnswer();
+        answer2.setText("answer2");
+        answer2.setPriority(2);
+        question.addAnswer(answer);
+        question.addAnswer(answer2);
+
+        question = questionRepository.save(question);
+
+        //when
+        Question resultedQuestion = questionService.setCorrectAnswer(question.getId(), question.getAnswers().get(1).getId());
+
+
+        //then
+        assertNotNull(resultedQuestion);
+        assertEquals(question.getAnswers().get(1).getId(), resultedQuestion.getCorrectAswer());
+
+    }
+
 }
