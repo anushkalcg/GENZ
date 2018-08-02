@@ -27,7 +27,7 @@ public class Question extends AbstractEntry{
 
     @ApiModelProperty(notes = "Question's correct answer id", required = false)
     @Column(name = "correct_answer_id")
-    private Integer correctAswer;
+    private Long correctAswer;
 
     @ApiModelProperty(notes = "Associated group", required = false)
     @ManyToOne
@@ -35,20 +35,34 @@ public class Question extends AbstractEntry{
     @JsonIgnore
     private Group group;
 
+    @ApiModelProperty(notes = "Answer's points", required = true)
+    @Column(name = "points")
+    private Integer points;
+
     @ApiModelProperty(notes = "Associated answers", required = false)
     @OneToMany(fetch = FetchType.EAGER, mappedBy="question", cascade = CascadeType.ALL)
+    @OrderBy("priority ASC")
     private List<Answer> answers;
 
     public Question() {
     }
 
-    public Question(String text, Integer priority, Integer correctAswer, Group group, List<Answer> answers) {
+    public Question(String text, Integer priority, Long correctAswer, Group group, List<Answer> answers, Integer points) {
         this();
         this.text = text;
         this.priority = priority;
         this.correctAswer = correctAswer;
         this.group = group;
         this.answers = answers;
+        this.points = points;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 
     public String getText() {
@@ -67,11 +81,11 @@ public class Question extends AbstractEntry{
         this.priority = priority;
     }
 
-    public Integer getCorrectAswer() {
+    public Long getCorrectAswer() {
         return correctAswer;
     }
 
-    public void setCorrectAswer(Integer correctAswer) {
+    public void setCorrectAswer(Long correctAswer) {
         this.correctAswer = correctAswer;
     }
 
@@ -111,13 +125,14 @@ public class Question extends AbstractEntry{
         return Objects.equals(text, question.text) &&
                 Objects.equals(priority, question.priority) &&
                 Objects.equals(correctAswer, question.correctAswer) &&
-                Objects.equals(answers, question.answers);
+                Objects.equals(answers, question.answers) &&
+                Objects.equals(points, question.points);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), text, priority, correctAswer, answers);
+        return Objects.hash(super.hashCode(), text, priority, correctAswer, answers, points);
     }
 
     @Override
@@ -126,6 +141,8 @@ public class Question extends AbstractEntry{
                 "text='" + text + '\'' +
                 ", priority=" + priority +
                 ", correctAswer=" + correctAswer +
+                ", group=" + group +
+                ", points=" + points +
                 ", answers=" + answers +
                 '}';
     }

@@ -25,7 +25,7 @@ public class UserStatistics {
     private UserStatisticsEntry userStatisticsEntry;
 
     @ApiModelProperty(notes = "User's id", required = true)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId
     private User user;
 

@@ -19,7 +19,6 @@ public class Group extends AbstractEntry{
     @Column(name = "name")
     private String name;
 
-
     @ApiModelProperty(notes = "Associated questions", required = false)
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="group")
     @OrderBy("priority ASC")

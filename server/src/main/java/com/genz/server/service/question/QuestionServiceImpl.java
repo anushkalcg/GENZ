@@ -69,6 +69,32 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public Question setCorrectAnswer(Long qouestionId, Long answerId){
+        Question question = questionRepository.findOne(qouestionId);
+        if(question == null){
+            throw new ResourceNotFoundException("NOT FOUND Question with ID: " +qouestionId);
+        }
+
+        if((question.getAnswers() == null) || (question.getAnswers().isEmpty())){
+            throw new ResourceValidationException("Question does not have potential answers");
+        }
+
+        Answer answer = answerRepository.findOne(answerId);
+        if(answer == null){
+            throw new ResourceNotFoundException("NOT FOUND Answer with ID: " +answer);
+        }
+
+
+        boolean isAnswerExistedInQuestion = question.getAnswers().stream().filter(answerVal -> answerVal.getId() == answerId).count() > 0;
+        if(!isAnswerExistedInQuestion){
+            throw new ResourceValidationException("Answer with ID: " + answerId + " is not associated with Question with ID: " + qouestionId);
+        }
+
+        question.setCorrectAswer(answerId);
+        return questionRepository.save(question);
+    }
+
+    @Override
     public Question add(Question entry) {
         return questionRepository.save(entry);
     }

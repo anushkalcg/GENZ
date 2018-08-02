@@ -177,6 +177,7 @@ public class User extends AbstractEntry{
     }
 
     public void setUserStatistics(UserStatistics userStatistics) {
+        userStatistics.setUser(this);
         this.userStatistics = userStatistics;
     }
 

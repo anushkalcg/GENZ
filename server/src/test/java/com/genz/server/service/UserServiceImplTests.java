@@ -3,9 +3,7 @@ package com.genz.server.service;
 import com.genz.server.ServerApplicationTests;
 import com.genz.server.exception.ResourceNotFoundException;
 import com.genz.server.exception.ResourceValidationException;
-import com.genz.server.model.Group;
 import com.genz.server.model.User;
-import com.genz.server.model.UserStatistics;
 import com.genz.server.model.UserStatus;
 import com.genz.server.repository.UserRepository;
 import com.genz.server.service.user.UserServiceImpl;
@@ -13,10 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
-
+/**
+ * @author Nikos.Toulios
+ */
 public class UserServiceImplTests extends ServerApplicationTests {
     @Autowired
     private UserServiceImpl userService;
@@ -397,7 +396,7 @@ public class UserServiceImplTests extends ServerApplicationTests {
     }
 
     @Test
-    public void get_success(){
+    public void get_success() {
         //given
         User user = createUser();
         user = userService.add(user);
@@ -465,20 +464,4 @@ public class UserServiceImplTests extends ServerApplicationTests {
         assertEquals(user.getId(), resultUser.getId());
     }
 
-    private User createUser(){
-        return new User(
-                0,
-                "email",
-                "password",
-                "name",
-                "surname",
-                19,
-                "0044787777",
-                "username",
-                UserStatus.NOT_STARTED,
-                new ArrayList<>(),
-                null
-
-        );
-    }
 }
