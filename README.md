@@ -6,8 +6,8 @@ The project implements the logic for a sport prediction game.
 
 ## Developers
 
-Anushka Jain
-Nikos Toulios
+- Anushka Jain
+- Nikos Toulios
 
 
 ## Prerequisites
