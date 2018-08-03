@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface GroupRepository extends CrudRepository<Group, Long> {
     List<Group> findAll();
+    Group findOneByName(String name);
 }

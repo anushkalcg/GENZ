@@ -34,6 +34,17 @@ public class GroupController {
         return groupService.get(id);
     }
 
+    @ApiOperation(value = "View the group's information from the associated name.", response = Group.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 404, message = "The group didnt found.")
+    })
+    @GetMapping(value = "/{group_name}", produces = "application/json;charset=UTF-8")
+    public Group getGroupByName(@PathVariable(value = "group_name") String name){
+        return groupService.getGroupByName(name);
+    }
+
     @ApiOperation(value = "View all groups's information.", response = Group.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the group info"),
@@ -113,13 +124,24 @@ public class GroupController {
     @ApiOperation(value = "Add a Question into the group")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the group info"),
-            @ApiResponse(code = 400, message = "Valdation with request."),
+            @ApiResponse(code = 400, message = "Validation with request."),
             @ApiResponse(code = 404, message = "The group or the question didnt found.")
     })
     @PutMapping(value = "/{id}/questions/{question_id}", produces = "application/json;charset=UTF-8")
     public void addQuestion(@PathVariable(value = "id") Long id,
                                @PathVariable(value = "question_id") Long questionId){
-        groupService.removeQuestion(id, questionId);
+        groupService.addNewQuestion(id, questionId);
+    }
+
+    @ApiOperation(value = "Add a Question into every group")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns the group info"),
+            @ApiResponse(code = 400, message = "Validation with request."),
+            @ApiResponse(code = 404, message = "The group or the question didnt found.")
+    })
+    @PutMapping(value = "/questions/all/{question_id}", produces = "application/json;charset=UTF-8")
+    public void addQuestions(@PathVariable(value = "question_id") Long questionId){
+        groupService.addNewQuestionToEveryGroup(questionId);
     }
 
     @ApiOperation(value = "Remove a Question from the group")
