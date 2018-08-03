@@ -8,6 +8,7 @@ import com.genz.server.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +24,21 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService{
 
-    private static String SECRET_KEY = "secret_key";
+
     private static final int MAX_AGE = 100;
     private static final int MIN_AGE = 18;
     private static final int DEFAULT_USER_SCORE = 0;
+
+    @Autowired
+    Environment environment;
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User add(User entry) {
+        String SECRET_KEY = environment.getProperty("genz.secretKey");
+
         validationAdd(entry);
         entry.setUserStatus(UserStatus.NOT_STARTED);
 
@@ -88,6 +94,7 @@ public class UserServiceImpl implements UserService{
 
         String encryptedPassword = null;
         try {
+            String SECRET_KEY = environment.getProperty("genz.secretKey");
             encryptedPassword = encrypt(password, SECRET_KEY);
             password = encryptedPassword;
         } catch (Exception e) {

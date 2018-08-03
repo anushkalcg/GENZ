@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface GroupService extends CommonService<Group> {
 
+    Group getGroupByName(String name);
     Group addNewUser(Long groupId, Long userId);
     Group removeUser(Long groupId, Long userId);
     public List<User> listUsers(Long groupId);
@@ -19,4 +20,5 @@ public interface GroupService extends CommonService<Group> {
     Group addNewQuestion(Long groupId, Long questionId);
     List<Question> getQuestions(Long groupId);
     Group removeQuestion(Long groupId, Long QuestionId);
+    void addNewQuestionToEveryGroup(Long questionId);
 }

@@ -89,6 +89,11 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    public void addNewQuestionToEveryGroup(Long questionId) {
+        listAll().forEach(group -> addNewQuestion(group.getId(), questionId));
+    }
+
+    @Override
     public List<Question> getQuestions(Long groupId) {
         return Optional.ofNullable(groupRepository.findOne(groupId))
                 .map(group -> {
@@ -146,6 +151,15 @@ public class GroupServiceImpl implements GroupService{
             throw new ResourceNotFoundException("NOT FOUND Group with ID:" + id);
         }
         groupRepository.delete(id);
+    }
+
+    @Override
+    public Group getGroupByName(String name) {
+        if(StringUtils.isBlank(name)){
+            throw new ResourceValidationException("The name filter should not be blank: " + name);
+        }
+        return Optional.ofNullable(groupRepository.findOneByName(name))
+                .orElseThrow(() -> new ResourceNotFoundException("NOT FOUND Group with name:" + name));
     }
 
     @Override
