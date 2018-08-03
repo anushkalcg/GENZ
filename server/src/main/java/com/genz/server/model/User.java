@@ -1,7 +1,6 @@
 package com.genz.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email","username"}) })
 @ApiModel(description = "User's information.")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User extends AbstractEntry{
 
     @Column(name = "score")
@@ -70,7 +70,6 @@ public class User extends AbstractEntry{
                     name = "group_id",
                     referencedColumnName = "id")
     })
-    @JsonManagedReference
     private List<Group> groups;
 
     @ApiModelProperty(notes = "User's statistics", required = false)
@@ -205,7 +204,6 @@ public class User extends AbstractEntry{
 
     @Override
     public String toString() {
-        List<Long> groups = getGroups().stream().map(group -> group.getId()).collect(Collectors.toList());
         return "User{" +
                 "score=" + score +
                 ", email='" + email + '\'' +
