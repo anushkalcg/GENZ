@@ -1,7 +1,6 @@
 package com.genz.server.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 @Table(name = "groups", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"}) })
 @ApiModel(description = "Group model")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Group extends AbstractEntry{
 
     @ApiModelProperty(notes = "Group's name", required = true)
@@ -30,7 +30,6 @@ public class Group extends AbstractEntry{
     @ApiModelProperty(notes = "Group's user", required = false)
     @ManyToMany(mappedBy = "groups",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonBackReference
     private List<User> users;
 
     public List<User> getUsers() {
