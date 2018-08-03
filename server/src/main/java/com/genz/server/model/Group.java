@@ -1,10 +1,13 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikos.Toulios
@@ -27,6 +30,7 @@ public class Group extends AbstractEntry{
     @ApiModelProperty(notes = "Group's user", required = false)
     @ManyToMany(mappedBy = "groups",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonBackReference
     private List<User> users;
 
     public List<User> getUsers() {
@@ -109,19 +113,22 @@ public class Group extends AbstractEntry{
         if (!super.equals(o)) return false;
         Group group = (Group) o;
         return Objects.equals(name, group.name) &&
-                Objects.equals(questions, group.questions);
+                Objects.equals(questions, group.questions) &&
+                Objects.equals(users, group.users);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), name, questions);
+        return Objects.hash(super.hashCode(), name, questions, users);
     }
 
     @Override
     public String toString() {
         return "Group{" +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
+                ", questions=" + questions +
+                ", users=" + users +
                 '}';
     }
 }

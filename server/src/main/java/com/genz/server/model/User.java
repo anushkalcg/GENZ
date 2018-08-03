@@ -1,10 +1,13 @@
 package com.genz.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikos.Toulios
@@ -67,6 +70,7 @@ public class User extends AbstractEntry{
                     name = "group_id",
                     referencedColumnName = "id")
     })
+    @JsonManagedReference
     private List<Group> groups;
 
     @ApiModelProperty(notes = "User's statistics", required = false)
@@ -197,5 +201,23 @@ public class User extends AbstractEntry{
         if(groups.contains(group)){
             groups.add(group);
         }
+    }
+
+    @Override
+    public String toString() {
+        List<Long> groups = getGroups().stream().map(group -> group.getId()).collect(Collectors.toList());
+        return "User{" +
+                "score=" + score +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", username='" + username + '\'' +
+                ", userStatus=" + userStatus +
+                ", userStatistics=" + userStatistics +
+                ", groups=" + groups +
+                '}';
     }
 }
