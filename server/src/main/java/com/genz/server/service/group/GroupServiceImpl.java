@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -133,6 +134,13 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public List<Group> listAll() {
         return groupRepository.findAll();
+    }
+
+    public List<Group> listAll(String name) {
+        if(StringUtils.isBlank(name)){
+            return groupRepository.findAll();
+        }
+        return Arrays.asList(getGroupByName(name));
     }
 
     @Override
