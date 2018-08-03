@@ -34,25 +34,14 @@ public class GroupController {
         return groupService.get(id);
     }
 
-    @ApiOperation(value = "View the group's information from the associated name.", response = Group.class)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Returns the group info"),
-            @ApiResponse(code = 400, message = "Valdation with request."),
-            @ApiResponse(code = 404, message = "The group didnt found.")
-    })
-    @GetMapping(value = "/{group_name}", produces = "application/json;charset=UTF-8")
-    public Group getGroupByName(@PathVariable(value = "group_name") String name){
-        return groupService.getGroupByName(name);
-    }
-
     @ApiOperation(value = "View all groups's information.", response = Group.class)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Returns the group info"),
             @ApiResponse(code = 400, message = "Valdation with request."),
     })
     @GetMapping(produces = "application/json;charset=UTF-8")
-    public List<Group> listAll(){
-        return groupService.listAll();
+    public List<Group> listAll(@RequestParam(value = "group_name", required = false) String groupName){
+        return groupService.listAll(groupName);
     }
 
     @ApiOperation(value = "Add a new Group", response = Group.class)
