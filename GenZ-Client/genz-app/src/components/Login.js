@@ -4,9 +4,22 @@ import './Login.css'
 import Header from './Header'
 import {Redirect} from 'react-router-dom'
 import axios from 'axios'
+import NotificationSystem  from 'react-notification-system';
 
 
 class Login extends Component {
+
+  _addNotification(event) {
+    event.preventDefault();
+    this._notificationSystem.addNotification({
+      message: 'Notification message',
+      level: 'success'
+    });
+  }
+
+  componentDidMount(){
+    this._notificationSystem = this.refs.notificationSystem;
+  }
 
   constructor(props) {
     super(props)
@@ -15,9 +28,11 @@ class Login extends Component {
     password: '',
     status: ''
     }
+    _notificationSystem: null
     this.handleChangedUsername=this.handleChangedUsername.bind(this);
     this.handleChangedPassword=this.handleChangedPassword.bind(this);
     this.loginRequest=this.loginRequest.bind(this);
+    this._addNotification = this._addNotification.bind(this)
 
   }
 
@@ -32,8 +47,9 @@ class Login extends Component {
   loginRequest(){
     
     const url = 'http://localhost:8088/api/login?password='+this.state.password+'&username='+this.state.username
-    axios.get(url).then(res=>this.props.history.push("/play")).catch(function(error){
+    axios.get(url).then(res=>this.props.history.push("/play/"+res.data.id)).catch(function(error){
       console.log(error)
+      this._addNotification;
     })
     console.log(this.state.username);
     console.log(this.state.status)
@@ -63,6 +79,7 @@ class Login extends Component {
                   </div> 
                 </div> 
                 <CustomButton buttonText="Login" onClick={this.loginRequest}/>
+                <NotificationSystem ref="notificationSystem"/>
               </form> 
             </div> 
           </div> 

@@ -12,17 +12,23 @@ import CreateLeague from './components/CreateLeague';
 import Join from './components/Join';
 import OddAccumulator from './components/OddAccumulator'
 
+const options = {
+    position: 'bottom center',
+    timeout: 5000,
+    offset: '30px',
+    transition: 'scale'
+  }
 ReactDOM.render(
     <BrowserRouter>
         <div>
             <Switch>
                 <Route exact path='/' component={App}/>
-                <Route path='/play' component={Play}/>
+                <Route path='/play/:id' component={Play}/>
                 <Route path='/quiz' component={Quiz}/>
                 <Route path='/login' component={Login}/>
                 <Route path='/signup' component={Signup}/>
-                <Route path='/create' component={CreateLeague}/>
-                <Route path='/join' component={Join}/>
+                <Route path='/create/:id' component={CreateLeague}/>
+                <Route path='/join/:id' component={Join}/>
                 <Route path='/odds' component={OddAccumulator}/>
                 <Route component={Error}/>
             </Switch>
