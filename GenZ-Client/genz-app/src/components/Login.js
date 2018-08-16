@@ -45,11 +45,11 @@ class Login extends Component {
   }
 
   loginRequest(){
-    
+    const self = this
     const url = 'http://localhost:8088/api/login?password='+this.state.password+'&username='+this.state.username
     axios.get(url).then(res=>this.props.history.push("/play/"+res.data.id)).catch(function(error){
-      console.log(error)
-      this._addNotification;
+      // console.log(error)
+      (alert("Incorrect Username or Password"))
     })
     console.log(this.state.username);
     console.log(this.state.status)

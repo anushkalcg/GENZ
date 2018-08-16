@@ -67,7 +67,7 @@ class Signup extends Component {
   }
   signupRequest() {
     const url = 'http://localhost:8088/api/user'
-    axios.post(url,this.state).then(this.props.history.push("/login")).catch(function(error){
+    axios.post(url,this.state).then(res => console.log(res.data)).then(this.props.history.push("/login")).catch(function(error){
       console.log(error)
     })
   }

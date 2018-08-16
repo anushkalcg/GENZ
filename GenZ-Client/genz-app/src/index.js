@@ -24,7 +24,7 @@ ReactDOM.render(
             <Switch>
                 <Route exact path='/' component={App}/>
                 <Route path='/play/:id' component={Play}/>
-                <Route path='/quiz' component={Quiz}/>
+                <Route path='/quiz/:groupInfo' component={Quiz}/>
                 <Route path='/login' component={Login}/>
                 <Route path='/signup' component={Signup}/>
                 <Route path='/create/:id' component={CreateLeague}/>
