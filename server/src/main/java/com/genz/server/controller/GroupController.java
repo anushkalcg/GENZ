@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * @author Nikos.Toulios
  */
+ @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/group")
 @Api(value = "groupManagement", description = "This API is for group management actions")

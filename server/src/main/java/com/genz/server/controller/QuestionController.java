@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * @author Nikos.Toulios
  */
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/question")
 @Api(value = "questionManagement", description = "This API is for question management actions")

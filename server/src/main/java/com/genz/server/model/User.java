@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email","username"}) })
+        @UniqueConstraint(columnNames = {"username"}) })
 @ApiModel(description = "User's information.")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User extends AbstractEntry{
